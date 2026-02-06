@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Report — Collezione Maglieria SS27</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #FAFAFA;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky; top: 0; z-index: 100;
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 0 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 56px;
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem; font-weight: 500; color: #333;
+            text-decoration: none; letter-spacing: 0.05em;
+        }
+
+        .nav-links { display: flex; gap: 8px; }
+
+        .nav-link {
+            padding: 8px 20px; text-decoration: none;
+            font-size: 0.75rem; font-weight: 500;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            border-radius: 20px; transition: all 0.2s ease;
+        }
+
+        .nav-link.active { background: #1B3F8D; color: white; }
+        .nav-link:not(.active) { color: #666; border: 1px solid #ddd; }
+        .nav-link:not(.active):hover { border-color: #1B3F8D; color: #1B3F8D; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #1B3F8D 0%, #3D5A80 100%);
+            color: white; padding: 70px 40px; text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300; font-size: 3.2rem;
+            letter-spacing: 0.15em; margin-bottom: 12px;
+        }
+
+        .hero .subtitle {
+            font-weight: 300; font-size: 1rem;
+            letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.9;
+        }
+
+        .hero .tagline {
+            margin-top: 16px; font-size: 0.85rem;
+            opacity: 0.8; letter-spacing: 0.1em;
+        }
+
+        .sample-badge {
+            display: inline-block; margin-top: 18px;
+            padding: 6px 18px; border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 4px; font-size: 0.65rem;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Insight Bar */
+        .insight-bar {
+            background: #333; color: white;
+            padding: 18px 40px;
+            display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+        }
+
+        .insight-item { text-align: center; }
+
+        .insight-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem; font-weight: 500; color: #F36841;
+        }
+
+        .insight-label {
+            font-size: 0.65rem; text-transform: uppercase;
+            letter-spacing: 0.1em; opacity: 0.7; margin-top: 2px;
+        }
+
+        /* Sections */
+        section { padding: 60px 40px; max-width: 1100px; margin: 0 auto; }
+
+        .section-header { text-align: center; margin-bottom: 50px; }
+
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400; font-size: 2rem;
+            letter-spacing: 0.1em; margin-bottom: 8px;
+        }
+
+        .section-tag {
+            display: inline-block; background: #1B3F8D; color: white;
+            padding: 4px 14px; border-radius: 12px;
+            font-size: 0.65rem; font-weight: 500;
+            letter-spacing: 0.1em; text-transform: uppercase;
+        }
+
+        /* Collection Grid */
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .item-card {
+            background: white; border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 28px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .item-color { height: 300px; position: relative; overflow: hidden; }
+        .item-color img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+        .item-number {
+            position: absolute; top: 12px; left: 12px;
+            background: white; width: 32px; height: 32px;
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem; font-weight: 600;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+        }
+
+        .item-trend {
+            position: absolute; bottom: 10px; right: 10px;
+            padding: 5px 12px; border-radius: 14px;
+            font-size: 0.65rem; text-transform: uppercase;
+            letter-spacing: 0.06em; font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .item-trend.peak { color: white; background: #C2694F; }
+        .item-trend.stable { color: white; background: #3D5A80; }
+        .item-trend.rising { color: white; background: #A39E58; }
+
+        .item-info { padding: 22px; }
+
+        .item-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem; font-weight: 500;
+            margin-bottom: 14px; line-height: 1.3;
+        }
+
+        .item-specs {
+            font-size: 0.72rem; color: #777;
+            line-height: 1.7; margin-bottom: 16px;
+        }
+
+        .item-specs span { display: block; }
+
+        .item-footer {
+            display: flex; justify-content: space-between;
+            align-items: center; padding-top: 14px;
+            border-top: 1px solid #eee;
+        }
+
+        .item-price { font-size: 1.3rem; font-weight: 600; color: #1B3F8D; }
+
+        .item-tier {
+            font-size: 0.65rem; text-transform: uppercase;
+            letter-spacing: 0.08em; font-weight: 600;
+            padding: 5px 12px; border-radius: 12px;
+        }
+
+        .item-tier.entry { color: #666; background: #f5f5f5; }
+        .item-tier.core { color: #3D5A80; background: #E8F0FE; }
+
+        /* Locked cards */
+        .item-card.locked:hover { transform: none; box-shadow: 0 6px 28px rgba(0,0,0,0.08); }
+
+        .item-card.locked .item-color {
+            background: linear-gradient(135deg, #E8E8E8 0%, #D0D0D0 50%, #DCDCDC 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .item-card.locked .item-name,
+        .item-card.locked .item-specs { filter: blur(6px); user-select: none; -webkit-user-select: none; }
+
+        .item-card.locked .item-footer { filter: blur(6px); user-select: none; -webkit-user-select: none; }
+
+        .item-locked-label {
+            background: rgba(255,255,255,0.92);
+            padding: 8px 18px; border-radius: 6px;
+            font-size: 0.7rem; font-weight: 500;
+            letter-spacing: 0.15em; text-transform: uppercase;
+            color: #999; box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #C58D82 0%, #D4B896 100%);
+            padding: 50px 40px; text-align: center; color: white;
+        }
+
+        .cta-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400; font-size: 1.8rem;
+            margin-bottom: 12px; letter-spacing: 0.08em;
+        }
+
+        .cta-section p {
+            font-size: 0.85rem; opacity: 0.9;
+            margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto;
+        }
+
+        .cta-link {
+            display: inline-block; background: white; color: #333;
+            padding: 14px 36px; border-radius: 30px;
+            text-decoration: none; font-size: 0.8rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .cta-link:hover { transform: scale(1.05); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+        /* Footer */
+        footer {
+            background: #222; color: white;
+            text-align: center; padding: 40px;
+        }
+
+        footer p { font-size: 0.8rem; opacity: 0.7; letter-spacing: 0.05em; }
+
+        /* Responsive */
+        @media (max-width: 1000px) { .collection-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        @media (max-width: 600px) {
+            .nav { padding: 0 16px; height: 50px; }
+            .nav-brand { font-size: 0.95rem; }
+            .nav-link { padding: 6px 14px; font-size: 0.65rem; }
+            .collection-grid { grid-template-columns: 1fr; }
+            .hero { padding: 50px 20px; }
+            .hero h1 { font-size: 2rem; letter-spacing: 0.08em; }
+            .hero .subtitle { font-size: 0.85rem; letter-spacing: 0.2em; }
+            .hero .tagline { font-size: 0.75rem; }
+            .insight-bar { gap: 20px; padding: 16px 20px; }
+            .insight-value { font-size: 1.3rem; }
+            section { padding: 40px 16px; }
+            .section-header h2 { font-size: 1.6rem; }
+            .section-header { margin-bottom: 30px; }
+            .item-info { padding: 18px; }
+            .cta-section { padding: 40px 20px; }
+            footer { padding: 30px 16px; }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 { font-size: 1.7rem; }
+            .nav-brand { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-brand">PJPF Sample Report</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Palette</a>
+            <a href="collezione.html" class="nav-link active">Collezione</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>Collezione SS27</h1>
+        <p class="subtitle">8 Pezzi Maglieria Donna</p>
+        <p class="tagline">Trend Research + Figurini + Specifiche Tecniche</p>
+        <span class="sample-badge">Report esemplificativo — 2 di 8 capi visibili</span>
+    </div>
+
+    <!-- Insight Bar -->
+    <div class="insight-bar">
+        <div class="insight-item">
+            <div class="insight-value">8</div>
+            <div class="insight-label">Pezzi Collezione</div>
+        </div>
+        <div class="insight-item">
+            <div class="insight-value">20+</div>
+            <div class="insight-label">Fonti Verificate</div>
+        </div>
+        <div class="insight-item">
+            <div class="insight-value">15 gg</div>
+            <div class="insight-label">Delivery</div>
+        </div>
+        <div class="insight-item">
+            <div class="insight-value">4</div>
+            <div class="insight-label">Trend Mappati</div>
+        </div>
+    </div>
+
+    <!-- Collection -->
+    <section style="background: white; max-width: 100%; padding: 60px 40px;">
+        <div style="max-width: 1100px; margin: 0 auto;">
+            <div class="section-header">
+                <h2>Collezione 8 Pezzi</h2>
+                <span class="section-tag">2 Figurini Visibili</span>
+            </div>
+            <div class="collection-grid">
+
+                <!-- VISIBLE: #1 Pull Traforato -->
+                <div class="item-card">
+                    <div class="item-color">
+                        <img src="Pull-Traforato-Feather-Light.png" alt="Pull Traforato Feather-Light">
+                        <span class="item-number">1</span>
+                        <span class="item-trend peak">Peak</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Pull Traforato Feather-Light</div>
+                        <div class="item-specs">
+                            <span>Viscosa Ecovero 70% + Cotone 30%</span>
+                            <span>Gauge 16/18 | 120-150 gsm</span>
+                        </div>
+                        <div class="item-footer">
+                            <span class="item-price">€79</span>
+                            <span class="item-tier entry">Entry</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VISIBLE: #2 Pull Crochet -->
+                <div class="item-card">
+                    <div class="item-color">
+                        <img src="2.-Pull-Crochet-Geometrico.png" alt="Pull Crochet Geometrico">
+                        <span class="item-number">2</span>
+                        <span class="item-trend stable">Stable</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Pull Crochet Geometrico</div>
+                        <div class="item-specs">
+                            <span>Cotone organico 100%</span>
+                            <span>Gauge 14/16 | 150-180 gsm</span>
+                        </div>
+                        <div class="item-footer">
+                            <span class="item-price">€99</span>
+                            <span class="item-tier core">Core</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOCKED: #3 -->
+                <div class="item-card locked">
+                    <div class="item-color">
+                        <span class="item-number">3</span>
+                        <span class="item-locked-label">Riservato</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Cardigan Matching Set</div>
+                        <div class="item-specs"><span>Composizione riservata</span><span>Gauge -- | --- gsm</span></div>
+                        <div class="item-footer"><span class="item-price">€---</span><span class="item-tier core">Core</span></div>
+                    </div>
+                </div>
+
+                <!-- LOCKED: #4 -->
+                <div class="item-card locked">
+                    <div class="item-color">
+                        <span class="item-number">4</span>
+                        <span class="item-locked-label">Riservato</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Top Matching Set</div>
+                        <div class="item-specs"><span>Composizione riservata</span><span>Gauge -- | --- gsm</span></div>
+                        <div class="item-footer"><span class="item-price">€---</span><span class="item-tier entry">Entry</span></div>
+                    </div>
+                </div>
+
+                <!-- LOCKED: #5 -->
+                <div class="item-card locked">
+                    <div class="item-color">
+                        <span class="item-number">5</span>
+                        <span class="item-locked-label">Riservato</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Polo Maglia Statement</div>
+                        <div class="item-specs"><span>Composizione riservata</span><span>Gauge -- | --- gsm</span></div>
+                        <div class="item-footer"><span class="item-price">€---</span><span class="item-tier entry">Entry</span></div>
+                    </div>
+                </div>
+
+                <!-- LOCKED: #6 -->
+                <div class="item-card locked">
+                    <div class="item-color">
+                        <span class="item-number">6</span>
+                        <span class="item-locked-label">Riservato</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Giacca Maglia Corta</div>
+                        <div class="item-specs"><span>Composizione riservata</span><span>Gauge -- | --- gsm</span></div>
+                        <div class="item-footer"><span class="item-price">€---</span><span class="item-tier core">Premium</span></div>
+                    </div>
+                </div>
+
+                <!-- LOCKED: #7 -->
+                <div class="item-card locked">
+                    <div class="item-color">
+                        <span class="item-number">7</span>
+                        <span class="item-locked-label">Riservato</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Gonna Maglia Traforata</div>
+                        <div class="item-specs"><span>Composizione riservata</span><span>Gauge -- | --- gsm</span></div>
+                        <div class="item-footer"><span class="item-price">€---</span><span class="item-tier core">Core</span></div>
+                    </div>
+                </div>
+
+                <!-- LOCKED: #8 -->
+                <div class="item-card locked">
+                    <div class="item-color">
+                        <span class="item-number">8</span>
+                        <span class="item-locked-label">Riservato</span>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Vest Statement</div>
+                        <div class="item-specs"><span>Composizione riservata</span><span>Gauge -- | --- gsm</span></div>
+                        <div class="item-footer"><span class="item-price">€---</span><span class="item-tier core">Core</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <h2>Vuoi un report come questo per il tuo brand?</h2>
+        <p>Trend research, palette colori, figurini con specifiche tecniche. Tutto in 15 giorni.</p>
+        <a href="#" class="cta-link">Contattaci →</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>PJPF Fashion Intelligence — Sample Report SS27</p>
+        <p style="margin-top: 8px; font-size: 0.7rem;">Ogni report include 8+ capi con specifiche complete, palette, trend analysis e styling.</p>
+    </footer>
+
+</body>
+</html>

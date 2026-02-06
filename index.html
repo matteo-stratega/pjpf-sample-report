@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Report — Palette Maglieria SS27</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #FAFAFA;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 56px;
+        }
+
+        .nav-brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links { display: flex; gap: 8px; }
+
+        .nav-link {
+            padding: 8px 20px;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link.active { background: #1B3F8D; color: white; }
+        .nav-link:not(.active) { color: #666; border: 1px solid #ddd; }
+        .nav-link:not(.active):hover { border-color: #1B3F8D; color: #1B3F8D; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #1B3F8D 0%, #3D5A80 100%);
+            color: white;
+            padding: 70px 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            font-size: 3.2rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 12px;
+        }
+
+        .hero .subtitle {
+            font-weight: 300;
+            font-size: 1rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .sample-badge {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 6px 18px;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 4px;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Insight Bar */
+        .insight-bar {
+            background: #333;
+            color: white;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .insight-item { text-align: center; }
+
+        .insight-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #F36841;
+        }
+
+        .insight-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            font-size: 2rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: #1B3F8D;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Palette Grid */
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto 40px;
+        }
+
+        .color-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .color-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .color-swatch { height: 130px; position: relative; }
+
+        .color-info { padding: 16px 20px; }
+
+        .color-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .color-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+
+        .color-hex { font-family: monospace; font-size: 0.75rem; color: #888; }
+
+        .color-role {
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .color-role.base { background: #f5f5f5; color: #666; }
+        .color-role.core { background: #E8F0FE; color: #3D5A80; }
+        .color-role.accent { background: #FDF0EC; color: #C2694F; }
+        .color-role.statement { background: #1B3F8D; color: white; }
+
+        .coy-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            color: #1B3F8D;
+        }
+
+        /* Locked cards */
+        .color-card.locked:hover { transform: none; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+        .color-card.locked .color-swatch { background: linear-gradient(135deg, #E0E0E0 0%, #C8C8C8 50%, #D5D5D5 100%) !important; }
+        .color-card.locked .color-name,
+        .color-card.locked .color-meta { filter: blur(6px); user-select: none; -webkit-user-select: none; }
+
+        .locked-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .locked-label {
+            background: rgba(255,255,255,0.92);
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #999;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Distribution */
+        .distribution { max-width: 900px; margin: 50px auto 0; text-align: center; }
+
+        .distribution h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .dist-bar {
+            display: flex;
+            height: 44px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .dist-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .dist-legend {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+        /* Color Stories */
+        .stories { max-width: 900px; margin: 0 auto; }
+
+        .story {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            margin-bottom: 20px;
+            padding: 24px 28px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border-left: 4px solid #1B3F8D;
+        }
+
+        .story-colors { display: flex; gap: 6px; }
+
+        .story-dot {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .story-text { flex: 1; }
+
+        .story-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #1B3F8D;
+        }
+
+        .story-desc { font-size: 0.85rem; color: #555; font-weight: 400; line-height: 1.5; }
+
+        .story.locked { position: relative; }
+        .story.locked .story-text { filter: blur(6px); user-select: none; -webkit-user-select: none; }
+        .story.locked .story-dot { background: #D5D5D5 !important; }
+
+        .story-locked-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #C58D82 0%, #D4B896 100%);
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            letter-spacing: 0.08em;
+        }
+
+        .cta-link {
+            display: inline-block;
+            background: white;
+            color: #333;
+            padding: 14px 36px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .cta-link:hover { transform: scale(1.05); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        footer p { font-size: 0.8rem; opacity: 0.7; letter-spacing: 0.05em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .palette-grid { grid-template-columns: repeat(2, 1fr); }
+            .insight-bar { gap: 24px; padding: 16px 20px; }
+        }
+
+        @media (max-width: 600px) {
+            .nav { padding: 0 16px; height: 50px; }
+            .nav-brand { font-size: 0.95rem; }
+            .nav-link { padding: 6px 14px; font-size: 0.65rem; }
+            .palette-grid { grid-template-columns: 1fr; }
+            .hero { padding: 50px 20px; }
+            .hero h1 { font-size: 2rem; letter-spacing: 0.08em; }
+            .hero .subtitle { font-size: 0.85rem; letter-spacing: 0.2em; }
+            .insight-bar { gap: 20px; }
+            .insight-value { font-size: 1.3rem; }
+            section { padding: 40px 16px; }
+            .section-header h2 { font-size: 1.6rem; }
+            .section-header { margin-bottom: 30px; }
+            .story { flex-direction: column; text-align: center; border-left: none; border-top: 4px solid #1B3F8D; }
+            .dist-legend { flex-wrap: wrap; gap: 12px 20px; }
+            .cta-section { padding: 40px 20px; }
+            footer { padding: 30px 16px; }
+        }
+
+        @media (max-width: 380px) {
+            .hero h1 { font-size: 1.7rem; }
+            .nav-brand { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-brand">PJPF Sample Report</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">Palette</a>
+            <a href="collezione.html" class="nav-link">Collezione</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>Maglieria Donna SS27</h1>
+        <p class="subtitle">Palette Colori — 9 Colori Stagionali</p>
+        <span class="sample-badge">Report esemplificativo — informazioni parzialmente oscurate</span>
+    </div>
+
+    <!-- Insight Bar -->
+    <div class="insight-bar">
+        <div class="insight-item">
+            <div class="insight-value">9</div>
+            <div class="insight-label">Colori Palette</div>
+        </div>
+        <div class="insight-item">
+            <div class="insight-value">3</div>
+            <div class="insight-label">Color Stories</div>
+        </div>
+        <div class="insight-item">
+            <div class="insight-value">5</div>
+            <div class="insight-label">Ensemble Ready</div>
+        </div>
+        <div class="insight-item">
+            <div class="insight-value">COY 2027</div>
+            <div class="insight-label">WGSN Color of Year</div>
+        </div>
+    </div>
+
+    <!-- Palette Section -->
+    <section>
+        <div class="section-header">
+            <h2>Palette Colori</h2>
+            <span class="section-tag">3 di 9 Colori Visibili</span>
+        </div>
+        <div class="palette-grid">
+            <!-- VISIBLE -->
+            <div class="color-card">
+                <div class="color-swatch" style="background: #F0EDE5;"></div>
+                <div class="color-info">
+                    <div class="color-name">Cloud White</div>
+                    <div class="color-meta">
+                        <span class="color-hex">#F0EDE5</span>
+                        <span class="color-role base">Base 20%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: #C58D82;"></div>
+                <div class="color-info">
+                    <div class="color-name">Clay</div>
+                    <div class="color-meta">
+                        <span class="color-hex">#C58D82</span>
+                        <span class="color-role core">Core 15%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-swatch" style="background: #A39E58;"></div>
+                <div class="color-info">
+                    <div class="color-name">Meadowland Green</div>
+                    <div class="color-meta">
+                        <span class="color-hex">#A39E58</span>
+                        <span class="color-role core">Core 12%</span>
+                    </div>
+                </div>
+            </div>
+            <!-- LOCKED -->
+            <div class="color-card locked">
+                <div class="color-swatch"><div class="locked-overlay"><span class="locked-label">Riservato</span></div></div>
+                <div class="color-info">
+                    <div class="color-name">Nome Colore</div>
+                    <div class="color-meta"><span class="color-hex">#------</span><span class="color-role core">Core</span></div>
+                </div>
+            </div>
+            <div class="color-card locked">
+                <div class="color-swatch"><div class="locked-overlay"><span class="locked-label">Riservato</span></div></div>
+                <div class="color-info">
+                    <div class="color-name">Nome Colore</div>
+                    <div class="color-meta"><span class="color-hex">#------</span><span class="color-role core">Core</span></div>
+                </div>
+            </div>
+            <div class="color-card locked">
+                <div class="color-swatch"><div class="locked-overlay"><span class="locked-label">Riservato</span></div></div>
+                <div class="color-info">
+                    <div class="color-name">Nome Colore</div>
+                    <div class="color-meta"><span class="color-hex">#------</span><span class="color-role accent">Accent</span></div>
+                </div>
+            </div>
+            <div class="color-card locked">
+                <div class="color-swatch"><div class="locked-overlay"><span class="locked-label">Riservato</span></div></div>
+                <div class="color-info">
+                    <div class="color-name">Nome Colore</div>
+                    <div class="color-meta"><span class="color-hex">#------</span><span class="color-role accent">Accent</span></div>
+                </div>
+            </div>
+            <div class="color-card locked">
+                <div class="color-swatch"><div class="locked-overlay"><span class="locked-label">Riservato</span></div></div>
+                <div class="color-info">
+                    <div class="color-name">Nome Colore</div>
+                    <div class="color-meta"><span class="color-hex">#------</span><span class="color-role accent">Accent</span></div>
+                </div>
+            </div>
+            <div class="color-card locked">
+                <div class="color-swatch"><div class="locked-overlay"><span class="locked-label">Riservato</span></div></div>
+                <div class="color-info">
+                    <div class="color-name">Nome Colore</div>
+                    <div class="color-meta"><span class="color-hex">#------</span><span class="color-role statement">Statement</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Distribution -->
+        <div class="distribution">
+            <h3>Distribuzione Colori</h3>
+            <div class="dist-bar">
+                <div class="dist-segment" style="background: #F0EDE5; width: 20%; color: #666;">20%</div>
+                <div class="dist-segment" style="background: #C58D82; width: 15%; color: white;">15%</div>
+                <div class="dist-segment" style="background: #A39E58; width: 12%; color: white;">12%</div>
+                <div class="dist-segment" style="background: #D5D5D5; width: 53%; color: #999;">Riservato</div>
+            </div>
+            <div class="dist-legend">
+                <div class="legend-item"><div class="legend-dot" style="background: #999;"></div><span>Base 20%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background: #3D5A80;"></div><span>Core 49%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background: #C2694F;"></div><span>Accent 23%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background: #1B3F8D;"></div><span>Statement 8%</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Color Stories -->
+    <section style="background: white; max-width: 100%; padding: 60px 40px;">
+        <div style="max-width: 1100px; margin: 0 auto;">
+            <div class="section-header">
+                <h2>Color Stories</h2>
+                <span class="section-tag">1 di 3 Visibile</span>
+            </div>
+            <div class="stories">
+                <div class="story">
+                    <div class="story-colors">
+                        <div class="story-dot" style="background: #1B3F8D;"></div>
+                        <div class="story-dot" style="background: #A39E58;"></div>
+                        <div class="story-dot" style="background: #C58D82;"></div>
+                    </div>
+                    <div class="story-text">
+                        <div class="story-name">Interconnessioni WGSN</div>
+                        <div class="story-desc">Ponte tra passato e futuro, natura e tecnologia. Per pezzi statement e capi d'impatto.</div>
+                    </div>
+                </div>
+                <div class="story locked">
+                    <div class="story-colors">
+                        <div class="story-dot"></div>
+                        <div class="story-dot"></div>
+                        <div class="story-dot"></div>
+                    </div>
+                    <div class="story-text">
+                        <div class="story-name">Color Story Riservata</div>
+                        <div class="story-desc">Disponibile nel report completo per il cliente.</div>
+                    </div>
+                    <div class="story-locked-overlay"><span class="locked-label">Riservato</span></div>
+                </div>
+                <div class="story locked">
+                    <div class="story-colors">
+                        <div class="story-dot"></div>
+                        <div class="story-dot"></div>
+                        <div class="story-dot"></div>
+                    </div>
+                    <div class="story-text">
+                        <div class="story-name">Color Story Riservata</div>
+                        <div class="story-desc">Disponibile nel report completo per il cliente.</div>
+                    </div>
+                    <div class="story-locked-overlay"><span class="locked-label">Riservato</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <h2>Vedi la Collezione</h2>
+        <a href="collezione.html" class="cta-link">2 Figurini Visibili + 6 Riservati →</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>PJPF Fashion Intelligence — Sample Report SS27</p>
+        <p style="margin-top: 8px; font-size: 0.7rem;">Ogni report include palette completa, storie colore, e distribuzione personalizzata.</p>
+    </footer>
+
+</body>
+</html>
