@@ -133,6 +133,17 @@
         .item-color { height: 300px; position: relative; overflow: hidden; }
         .item-color img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 
+        /* Watermark overlay */
+        .item-color::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='160'%3E%3Ctext x='130' y='80' font-family='Montserrat,sans-serif' font-size='22' font-weight='600' fill='%23333' fill-opacity='0.25' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30 130 80)'%3ETrendJourney%3C/text%3E%3C/svg%3E");
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 2;
+        }
+
         .item-number {
             position: absolute; top: 12px; left: 12px;
             background: white; width: 32px; height: 32px;
@@ -323,7 +334,7 @@
                 <!-- VISIBLE: #1 Pull Traforato -->
                 <div class="item-card">
                     <div class="item-color">
-                        <img src="Pull-Traforato-Feather-Light.png" alt="Pull Traforato Feather-Light">
+                        <img src="Pull-Traforato-Feather-Light.png" alt="Pull Traforato Feather-Light" draggable="false">
                         <span class="item-number">1</span>
                         <span class="item-trend peak">Peak</span>
                     </div>
@@ -343,7 +354,7 @@
                 <!-- VISIBLE: #2 Pull Crochet -->
                 <div class="item-card">
                     <div class="item-color">
-                        <img src="2.-Pull-Crochet-Geometrico.png" alt="Pull Crochet Geometrico">
+                        <img src="2.-Pull-Crochet-Geometrico.png" alt="Pull Crochet Geometrico" draggable="false">
                         <span class="item-number">2</span>
                         <span class="item-trend stable">Stable</span>
                     </div>
@@ -454,6 +465,13 @@
         <p>TrendJourney — Sample Report SS27</p>
         <p style="margin-top: 8px; font-size: 0.7rem;">Ogni report include 8+ capi con specifiche complete, palette, trend analysis e styling.</p>
     </footer>
+
+    <!-- Protection: disable right-click and drag on images -->
+    <script>
+    document.addEventListener('contextmenu', function(e) {
+        if (e.target.closest('.item-color')) e.preventDefault();
+    });
+    </script>
 
 </body>
 </html>
